@@ -58,14 +58,19 @@ def main():
         i += 1
         
         try:
-            gps.get_pvt()
+
             j=0
-            nav_data = gps.pvt_data
-            
+
             while j==0:
                 print("waiting for GPS connection")
                 time.sleep(5)
-                gps.get_pvt()
+                while True:
+                    try:
+                        gps.get_pvt()
+                        break
+                    except OSError as e:
+                        print(f"failed to retrieve GPS data, retrying...")
+                        time.sleep(1)
                 nav_data = gps.pvt_data
                 if nav_data:
                     j = 1
